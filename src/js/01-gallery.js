@@ -7,13 +7,24 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 // Change code below this line
 
-console.log(galleryItems);
+const createGallery = galleryItems =>
+  galleryItems
+    .map(
+      ({ original, preview, description }) =>
+        `<li>
+          <a class="gallery__item" href="${original}">
+            <img style="display:block" class="gallery__image" src="${preview}" alt="${description}" />
+          </a>
+        </li>`
+    )
+    .join('');
 
-// Initialize SimpleLightbox
-new SimpleLightbox(gallery, {
-    captions: true,
-    captionSelector: 'self', // Отримати підпис з елементу A-Tag
-    captionType: 'data', // Отримати підпис з атрибута 'data-caption'
-    captionsData: 'caption', // Використовувати значення атрибута 'data-caption' як підпис
-    captionDelay: 250, // Затримка перед появою підпису (в мілісекундах)
-  });
+const inputGalleryToDocument = (() => {
+  document.querySelector('.gallery').innerHTML = createGallery(galleryItems);
+})();
+
+const gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  scrollZoom: false,
+});
