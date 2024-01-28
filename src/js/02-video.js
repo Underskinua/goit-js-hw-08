@@ -4,3 +4,6 @@ const player = new VimeoPlayer({
     videoId: "236203659",
   });
 
+  player.on("timeupdate", () => {
+    localStorage.setItem("videoplayer-current-time", player.currentTime);
+  });
