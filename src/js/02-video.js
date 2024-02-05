@@ -5,13 +5,14 @@ import throttle from "lodash.throttle";
 //const localStorageTime = "videoplayer-current-time";
 
 // Инициалзация плеера
-//const player = new VimeoPlayer("vimeo-player");
+const player = new VimeoPlayer('vimeo-player');
 
-const iframe = document.querySelector("iframe");
-const player = new Vimeo.Player(iframe);
+
 
 player.on('play', function() {
   console.log('played the video!');
 });
   
 
+// Запуск плеєра
+player.play();
