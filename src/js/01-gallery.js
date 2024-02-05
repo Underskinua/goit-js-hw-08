@@ -1,14 +1,14 @@
 // Add imports above this line
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
-// Описаний в документації
+// Описаный в документации
 import SimpleLightbox from "simplelightbox";
-// Додатковий імпорт стилів
+// Дополнительный импорт стилей
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 const gallery = document.querySelector('.gallery');
 
-// Generate gallery items markup
+// Генерация макета галереи 
 const galleryItemsMarkup = galleryItems
   .map(
     ({ preview, original, description }) =>
@@ -21,22 +21,19 @@ const galleryItemsMarkup = galleryItems
 )
 .join('');
 
-// Add gallery items to the list
+// Добавление галереии 
 gallery.innerHTML = galleryItemsMarkup;
 
 // Initialize SimpleLightbox
 new SimpleLightbox('.gallery a', {
   captions: true,
-  captionSelector: 'self', // Отримати підпис з елементу A-Tag
-  captionType: 'data', // Отримати підпис з атрибута 'data-caption'
-  captionsData: 'caption', // Використовувати значення атрибута 'data-caption' як підпис
-  captionDelay: 250, // Затримка перед появою підпису (в мілісекундах)
+  captionSelector: '.self', // Получить подпись с атребута A-Tag
+  captionType: 'data', // Получить подптсь с атрибута 'data-caption'
+  captionsData: 'caption', // Использовать значение атрибута 'data-caption' как подпись
+  captionDelay: 250, // Задержка перед появлением подписи (в милисекундах)
+
+  captionAttribute: 'data-caption'
 });
-
-
-
-
-
 
 
 //console.log(galleryItems);
