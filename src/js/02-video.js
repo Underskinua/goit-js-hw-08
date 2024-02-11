@@ -12,7 +12,6 @@ function onPlay() {
 // Добавление события 'play'
 player.on('play', onPlay);
 
-
 // Отслеживание события timeupdate --Шаг-4
 //player.on('timeupdate', function(data) {
   // Обновление времени воспроизведения
@@ -22,7 +21,6 @@ player.on('play', onPlay);
   //localStorage.setItem(localStorageTime, data.seconds);
   //console.log('Я сохраняюсь в localStorageTime');
 //});
-
 // Восстановление воспроизведения с сохраненной позиции
 //const savedTime = localStorage.getItem(localStorageTime);
 //if (savedTime) {
