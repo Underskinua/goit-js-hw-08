@@ -8,6 +8,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 const gallery = document.querySelector('.gallery');
 
+
 // Генерация макета галереи 
 const galleryItemsMarkup = galleryItems
   .map(
@@ -26,13 +27,11 @@ gallery.innerHTML = galleryItemsMarkup;
 
 // Initialize SimpleLightbox
 new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionSelector: '.self', // Получить подпись с атребута A-Tag
-  captionType: 'data', // Получить подптсь с атрибута 'data-caption'
-  captionsData: 'caption', // Использовать значение атрибута 'data-caption' как подпись
+  captions: true, // Включаем отображение подписей к изображениям  
+  captionsData: 'alt', // Получить подптсь с атрибута 'alt'
+  
   captionDelay: 250, // Задержка перед появлением подписи (в милисекундах)
-
-  captionAttribute: 'data-caption'
+  
 });
 
 
