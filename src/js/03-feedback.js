@@ -1,111 +1,48 @@
+// Импортируем библиотеку lodash.throttle, позволяет ограничивать частоту вызова функции
 import throttle from 'lodash.throttle';
-
-console.log('JS подключен');
+// console.log('JS подключен');
 
 // Определяем переменные для элементов формы
-const form = document.querySelector('.feedback-form');
-const emailInput = form.querySelector('input[name="email"]');
-const messageInput = form.querySelector('textarea[name="message"]');
+const formRef = document.querySelector('.feedback-form');
+// Определяем объект для хранения данных формы, содержит значения email и message, согласно условия
+let objOfValue = JSON.parse(localStorage.getItem('feedback-form-state')) ?? {
+  // Получаем данные из локального хранилища, если их нет, то создаем пустой объект
+  email: '',
+  message: '',
+};
+// Получаем элементы формы input[name="email"] и textarea[name="message"]
+const { email, message } = formRef.elements;
 
-function updateStorage() {
-    // Получаем данные с полей формы
-    const email = emailInput.value;
-    const message = messageInput.value;
-  
-    // Создаем объекты с данными
-    const formData = {
-      email,
-      message,
-    };
-  
-    // Сохраняем данные в локальном хранилище
-    localStorage.setItem('feedback-form-state', JSON.stringify(formData));
-  }
-  
-// Используем функцию updateStorage
-  form.addEventListener('submit', updateStorage);
-  
-// Обновление хранилища не чаще, раз на 500 милисекунд
-const throttledUpdateStorage = throttle(updateStorage, 500);
-// Прив'язка оновлення сховища до події
-form.addEventListener('submit', (event) => {
-    throttledUpdateStorage();
-    console.log('Хранилище обновлено!');
-    event.preventDefault();
+//Заполняем поля формы значениями из объекта objOfValue,чтобы при перезагрузке страницы значения в полях формы были восстановлены
+email.value = objOfValue.email.trim();
+message.value = objOfValue.message.trim();
+
+// Добавляем обработчик события 'input' на форму, будет срабатывать при каждом изменении значения в полях формы
+formRef.addEventListener('input', throttle(() => {
+  // Обновляем объект objOfValue значениями из полей формы
+  objOfValue.email = email.value.trim();
+  objOfValue.message = message.value.trim();
+  // Сохраняем объект objOfValue в локальном хранилище, чтобы сохранить данные формы при перезагрузке страницы
+  localStorage.setItem('feedback-form-state', JSON.stringify(objOfValue));
+}, 500));
+
+// Добавляем обработчик события 'submit' на форму, Он будет срабатывать при нажатии кнопки "Отправить"
+formRef.addEventListener('submit', (event) => {
+  // Предотвращаем стандартное действие браузера, необходимо, чтобы не произошло перенаправление на другую страницу
+  event.preventDefault();
+  // Удаляем объект objOfValue из локального хранилища, чтобы после отправки формы данные из нее были удалены
+  localStorage.removeItem('feedback-form-state');
+
+  // Проверяем, заполнены ли поля формы, Если нет, то выводи
+  //if (email.value === '' || message.value === '') {
+    //return alert('Пожалуйста, заполните все поля!'); или
+    //console.log('Пожалуйста, заполните все поля!');
+    //return;
+  //}
+
+  console.log(objOfValue);
+  //console.log('Информация о пользователе:', objOfValue); - вариант вывода в консоле 
+
+  // Сбрасываем форму, чтобы после отправки формы поля формы были очищены
+  formRef.reset();
 });
-
-// Шаг-2 --Определяем функцию для получения данных из локального хранилища
-function getFormDataFromStorage() {
-    const storedFormData = localStorage.getItem('feedback-form-state');
-    if (storedFormData) {
-      return JSON.parse(storedFormData);
-    }
-    return null;
-  }
-
-// Функция для обновления данных в локальном хранилище
-function updateFormData() {
-  // Создаем объект с данными формы
-  const formData = {
-    email: emailInput.value,
-    message: messageInput.value,
-  };
-
-  // Преобразуем объект в JSON
-  const jsonFormData = JSON.stringify(formData);
-
-  // Сохраняем данные в локальном хранилище
-  localStorage.setItem('feedback-form-state', jsonFormData);
-}
-
-// Добавляем обработчик события 'input' к форме
-form.addEventListener('input', () => {
-  // Обновляем данные в локальном хранилище при каждом изменении
-  updateFormData();
-});
-
-// Швг-2--Добавляем обработчик события DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Получение данных из локального хранилища и заполнение формы
-    const storedFormData = getFormDataFromStorage();
-    if (storedFormData) {
-      emailInput.value = storedFormData.email;
-      messageInput.value = storedFormData.message;
-    }
-  });
-// Шаг-3--
-function clearFormData() {
-    // Очищение локального хранилища
-    localStorage.clear();  
-    // Очищение полей формы
-    emailInput.value = '';
-    messageInput.value = '';
-  }
-
-  form.addEventListener('submit', (event) => {
-    // Отримання даних з полів форми
-    const email = emailInput.value;
-    const message = messageInput.value;
-    // Очищення сховища та полів форми
-    clearFormData();
-    // Створення об'єкта з даними
-    const formData = {
-      email,
-      message,
-    };
-  
-    // Виведення об'єкта в консоль
-    console.log(formData);
-    event.preventDefault();
-  });
-
-
-
-// Функция для отображения сообщения в консоли
-function logFormData() {
-    console.log('**Отслеживаю на форме событие input:**');
-    console.log('**Email:**', emailInput.value);
-    console.log('**Сообщение:**', messageInput.value);
-  }
-  // Вызов функции при изменении значений в полях
-form.addEventListener('input', logFormData);
